@@ -8,12 +8,12 @@ import { useUser } from '../context/UserContext';
 
 function Signin() {
 	const { setUserDetails } = useUser();
-	const [ email, setEmail ] = useState('');
-	const [ password, setPassword ] = useState('');
-	const [ errorMsg, setErrorMsg ] = useState('');
-	const [ isTouched, setIsTouched ] = useState({ email: false, password: false });
-	const [ isLoading, setIsLoading ] = useState(false);
-	const [ isHeaderShown, setHeaderShown ] = useState(false);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [errorMsg, setErrorMsg] = useState('');
+	const [isTouched, setIsTouched] = useState({ email: false, password: false });
+	const [isLoading, setIsLoading] = useState(false);
+	const [isHeaderShown, setHeaderShown] = useState(false);
 	const emailInvalid = isTouched.email && email === '';
 	const passwordInvalid = isTouched.password && password === '';
 	const canProceed = password && email && !passwordInvalid && !emailInvalid;
@@ -27,12 +27,18 @@ function Signin() {
 				.then(({ authorization, data }: any) => {
 					setIsLoading(false);
 					localStorage.setItem('roseflix-auth', authorization);
-					localStorage.setItem('roseflix-user', JSON.stringify(data.userDetails));
+					localStorage.setItem(
+						'roseflix-user',
+						JSON.stringify(data.userDetails)
+					);
 					setUserDetails(data.userDetails);
 				})
 				.catch(({ response }) => {
 					setIsLoading(false);
-					setErrorMsg(response.data.message);
+					setErrorMsg(
+						response?.data.message ||
+							'Unable to reach server: the server is not responding'
+					);
 				});
 		}
 	};
@@ -46,7 +52,11 @@ function Signin() {
 	};
 
 	return (
-		<Scrollbar noDefaultStyles className="main-scrollbar" onScroll={({ scrollTop }: any) => handleOnScroll(scrollTop)}>
+		<Scrollbar
+			noDefaultStyles
+			className="main-scrollbar"
+			onScroll={({ scrollTop }: any) => handleOnScroll(scrollTop)}
+		>
 			<HeaderContainer logoOnly isHeaderShown={isHeaderShown} />
 			<Form>
 				<Form.Title>Sign In</Form.Title>
@@ -64,7 +74,9 @@ function Signin() {
 						}}
 						className={emailInvalid ? 'has-error' : ''}
 					/>
-					{emailInvalid && <Form.Error>Please enter your email or phone number.</Form.Error>}
+					{emailInvalid && (
+						<Form.Error>Please enter your email or phone number.</Form.Error>
+					)}
 					<Form.Input
 						type="password"
 						placeholder="Password"
@@ -79,11 +91,14 @@ function Signin() {
 						}}
 						className={passwordInvalid ? 'has-error' : ''}
 					/>
-					{passwordInvalid && <Form.Error>Please enter your password.</Form.Error>}
+					{passwordInvalid && (
+						<Form.Error>Please enter your password.</Form.Error>
+					)}
 					<Form.Button disabled={!canProceed || isLoading} type="submit">
 						{isLoading ? (
 							<React.Fragment>
-								<Form.Spinner />Signing in...
+								<Form.Spinner />
+								Signing in...
 							</React.Fragment>
 						) : (
 							'Sign In'
@@ -91,9 +106,12 @@ function Signin() {
 					</Form.Button>
 				</Form.FormGroup>
 				<Form.Text>
-					New to Roseflix? <Form.Link to={ROUTES.SIGNUP.path}>Sign up now</Form.Link>.
+					New to Roseflix?{' '}
+					<Form.Link to={ROUTES.SIGNUP.path}>Sign up now</Form.Link>.
 				</Form.Text>
-				<Form.TextSmall>This page is protected by Google reCAPTCHA to ensure you're not a bot.</Form.TextSmall>
+				<Form.TextSmall>
+					This page is protected by Google reCAPTCHA to ensure you're not a bot.
+				</Form.TextSmall>
 			</Form>
 			<FooterContainer />
 		</Scrollbar>
