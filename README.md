@@ -192,3 +192,6 @@ Project Link: [https://github.com/rosebilag/roseflix](https://github.com/rosebil
 - `enzyme-to-json` helps make snapshot tests more readable & by adding it to the `snapshotSerializers` it is automatically applied to each Snapshot test via this above configuration.
 - `collectCoverageFrom` indicates for which set of files should coverage information be collected. In our case, we have restricted Jest to run on all files with .js extension except src/index.js as it is usually just boilerplate code, which doesn’t need to be tested.
 - `coverageReporters` tells jest to output the coverage report via terminal instead of creating an html page to display these results. As a developer it is much easier to check the terminal to understand where you stand in terms of test coverage.
+
+3. Working with TypeScript and create-react-app
+   [solution](https://morioh.com/p/bbf87865224d)
